@@ -1,0 +1,1 @@
+export { default as setMines } from '../helpers/generatedMines';
