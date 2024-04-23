@@ -1,9 +1,11 @@
 import React from "react";
-import { Footer } from "../index";
-//import "./game-over-modal.css";
+import { Footer } from "../";
+import "./game-over-modal.css";
 
 //TODO: check this component
-function GameOverModal({ isOpen, points, handleClose }) {
+function GameOverModal(props) {
+  const { isOpen, stopWatch, minesLeft, handleClose } = props;
+
   const modalClass = `w3-modal${isOpen ? " show-modal" : ""}`;
   return (
     <div id="modal-gameOver" className={modalClass}>
@@ -19,7 +21,8 @@ function GameOverModal({ isOpen, points, handleClose }) {
           <div>Jogo Terminado</div>
         </header>
         <div className="info" id="messageGameOver">
-          <p>Pontuação: {points}</p>
+          <p>Tempo: {stopWatch} </p>
+          <p>Minas restantes: {minesLeft}</p>
         </div>
         {/* <div className="info" id="nickname">
           Nick Name:

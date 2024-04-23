@@ -1,1 +1,1 @@
-export { default as setMines } from '../helpers/generatedMines';
+export { default as setMines } from '../helpers/setMines';

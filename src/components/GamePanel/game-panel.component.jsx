@@ -1,49 +1,72 @@
 import React, { useEffect } from "react";
+import { Cell } from "../";
+import './game-panel.css'
 
 const GamePanel = (props) => {
-    const { level, gameStarted, onGameStart } = props;
+    const { level, gameStarted, cells, setCells, stopWatch, onGameOver } = props;
 
-    const [revealCells, setRevealCells] = React.useState([]);
     const [findMines, setFindMines] = React.useState(0);
 
-    const handleClickCell = (cell) => {
+    // Rigth click to reveal cell
+    const handleClickToRevealCell = (cell) => {
         if (gameStarted)
-            setRevealCells(previous => [...previous, cell]);
+            //TODO: reveal cell
+            console.log(cell);
+    }
+
+    // Left click to change state cell
+    const handleClickToStatecell = (cell) => {
+        if (gameStarted)
+            //TODO: change state cell
+            console.log(cell);
     }
 
     const checkCell = () => {
         // TODO: Logic
+        //maybe recursive function
+        // if cell is empty/null → reveal all adjacent cells until have number (wall of number)
+        // if cell is number → reveal cell
+        // if cell is mine → end game and reveal all mines
     }
 
     // Start game (trigger on gameStarted)
-    useEffect(() => {
+    /*useEffect(() => {
         if (!gameStarted) {
             setRevealCells([]);
             setFindMines([]);
         }
-    }, [gameStarted])
+    }, [gameStarted])*/
 
     // Check if the player won the game (tigger on findMines)
-    useEffect(() => {
+    /*useEffect(() => {
         //TODO: Check if the player won the game
         if (gameStarted && findMines === level)
-            onGameStart(false);
-    }, [findMines]) //TODO: PLACEHOLDER
+            onGameOver(true);
 
-    //TODO: check cell
+        onGameOver(true);
+    }, [findMines])*/ //TODO: PLACEHOLDER
 
-    const gameLevel =
-        level === "1"
-            ? "Básico"
-            : level === "2"
-            ? "Intermédio"
-            : "Avançado";
+    const gameClass =
+    level === "1"
+      ? ""
+      : level === "2"
+      ? "intermedio"
+      : "avancado";
 
     return (
         <section className="game-panel">
-            <h3 className="sr-only">PEças do Jogo</h3>
-            <div id="game" className={gameLevel}>
-                {/*TODO: show tab*/}
+            <div id="game" className={gameClass}>
+                {cells.map((cellRow, index) =>
+                    cellRow.map((cell, index) => 
+                        <Cell
+                            key={index}
+                            value={cell.value}
+                            isRevealed={cell.isRevealed}
+                            onLeftClieck={() => handleClickToRevealCell()}
+                            onRighClick={() => handleClickToStatecell()}
+                        />
+                        )
+                )}
             </div>
         </section>
     );

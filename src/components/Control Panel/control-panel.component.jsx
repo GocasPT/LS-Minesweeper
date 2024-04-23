@@ -3,8 +3,8 @@ import "./control-panel.css";
 
 //TODO: improve this component
 function ControlPanel(props) {
-  const { gameStarted, selectedLevel, onGameStart, onLevelChange, timer } =
-    props;
+  const { gameStarted, level, onGameStart, onLevelChange, stopWatch, minesLeft } = props;
+  
   const gameStartedClass = gameStarted ? " gameStarted" : "";
 
   return (
@@ -28,7 +28,7 @@ function ControlPanel(props) {
         <button
           type="button"
           id="btPlay"
-          disabled={selectedLevel === "0"}
+          disabled={level === "0" || gameStarted}
           onClick={onGameStart}
         >
           {gameStarted ? "Parar jogo" : "Iniciar Jogo"}
@@ -40,19 +40,12 @@ function ControlPanel(props) {
         </p>
         <dl className={`list-item left${gameStartedClass}`}>
           <dt>Tempo de Jogo:</dt>
-          <dd id="gameTime">{timer}</dd>
+          <dd id="gameTime">{stopWatch}</dd>
         </dl>
         <dl className={`list-item right${gameStartedClass}`}>
-          <dt>Pontuação TOP:</dt>
-          <dd id="pointsTop">0</dd>
+          <dt>Minas restantes</dt>
+          <dd id="minesLeft">{minesLeft}</dd>
         </dl>
-        <dl className={`list-item left${gameStartedClass}`}>
-          <dt>Pontuação:</dt>
-          <dd id="points">0</dd>
-        </dl>
-        <div id="top10" className={`right`}>
-          <button id="btTop">Ver TOP 10</button>
-        </div>
       </div>
     </section>
   );
