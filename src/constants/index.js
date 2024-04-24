@@ -22,16 +22,18 @@ export const LEVELS = {
 	}
 }
 
-// Estados de uma célula
-export const CODES = {
-	OPENED: 0,
-	NOTHING: -1,
-	FLAG: -2,
-	QUESTION: -3,
-	MINE: -4,
-	MINE_FLAG: -5,
-	MINE_QUESTION: -6
-};
+// Valores da célula
+export const CELL_VALUES = {
+	EMPTY: 0,
+	MINE: -1
+}
+
+// Estados da célula
+export const CELL_FLAG = {
+	NOTHING: 0,
+	FLAG: 1,
+	QUESTION: 2
+}
 
 // Emojis
 export const EMOTES = {

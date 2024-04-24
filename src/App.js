@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Header, ControlPanel, Footer, GamePanel, GameOverModal } from './components';
-import { setMines } from './helpers'
-import { LEVELS } from './constants'
 
 let timerID = undefined;
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [level, setLevel] = useState("0");
-
-  const [cells, setCells] = useState([[]]);
+  const [mines, setMines] = useState(0);
   const [stopWatch, setStopWatch] = useState(0);
-
   const [gameOver, setGameOver] = useState(false);
-  const [minesLeft, setMinesLeft] = useState(0);
 
   // Start the game
   const handleGameStart = () => {
@@ -27,38 +22,6 @@ function App() {
   const handleLevelChange = (event) => {
     const { value } = event.currentTarget;
     setLevel(value);
-
-    let level;
-    switch (value) {
-      // Level: Básico
-      case "1":
-        level = LEVELS.BASIC;
-        break;
-
-      // Level: Intermediário
-      case "2":
-        level = LEVELS.INTERMEDIATE;
-        break;
-      
-      // Level: Avançado
-      case "3":
-        level = LEVELS.ADVANCED;
-        break;
-
-      // Default
-      default:
-        level = null;
-        break;
-    }
-
-    if (level === null) {
-      setMinesLeft(0);
-      setCells([[]]);
-      return;
-    }
-
-    setMinesLeft(level.mines);
-    setCells(Array.from({ length: level.rows }, () => Array.from({ length: level.cols }, () => 0)));
   }
 
   // Stopwatch count (trigger on gameStarted)
@@ -92,20 +55,18 @@ function App() {
           onGameStart={handleGameStart}
           onLevelChange={handleLevelChange}
           stopWatch={stopWatch}
-          minesLeft={minesLeft}
+          minesLeft={mines}
         />
         <GamePanel
           gameStarted={gameStarted}
           level={level}
-          cells={cells}
-          setCells={setCells}
-          stopWatch={stopWatch}
+          setMines={(value) => setMines(value)}
           onGameOver={(value) => setGameOver(value)}
         />
         <GameOverModal
           gameOver={gameOver}
           stopWatch={stopWatch}
-          minesLeft={minesLeft}
+          minesLeft={mines}
         />
       </main>
       <Footer />

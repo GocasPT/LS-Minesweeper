@@ -1,71 +1,129 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { CELL_FLAG, CELL_VALUES, LEVELS } from '../../constants';
+import { createGrid, putMines, reveal } from '../../helpers';
 import { Cell } from "../";
 import './game-panel.css'
 
 const GamePanel = (props) => {
-    const { level, gameStarted, cells, setCells, stopWatch, onGameOver } = props;
+    const { gameStarted, level, setMines, onGameOver } = props;
 
-    const [findMines, setFindMines] = React.useState(0);
+    const [grid, setGrid] = useState([]);
+    const [cellsRevealed, setRevealCells] = useState(0);
 
-    // Rigth click to reveal cell
-    const handleClickToRevealCell = (cell) => {
-        if (gameStarted)
-            //TODO: reveal cell
-            console.log(cell);
-    }
+    useEffect(() => { // cria umma nova grid
+        let levelConfig;
+        switch (level) {
+            case '1':
+                levelConfig = LEVELS.BASIC;
+                break;
+
+            case '2':
+                levelConfig = LEVELS.INTERMEDIATE;
+                break;
+
+            case '3':
+                levelConfig = LEVELS.ADVANCED;
+                break;
+
+            default:
+                levelConfig = null;
+                break;
+        }
+
+        if (levelConfig == null) {
+            setGrid([]);
+            return;
+        }
+
+        let newGrid = createGrid(levelConfig.rows, levelConfig.cols);
+        console.log(newGrid);
+        let newMines = putMines(newGrid, levelConfig.mines);
+        
+        console.log(newGrid);
+        console.log(newMines);
+
+        setGrid(newGrid);
+        //setMines(newMines);
+    }, [level]) // quando o nível mudar
 
     // Left click to change state cell
-    const handleClickToStatecell = (cell) => {
-        if (gameStarted)
-            //TODO: change state cell
-            console.log(cell);
-    }
+    const revealCell = (x, y) => {
+        if (gameStarted) {
+            if (grid[x][y].revealed)
+                return
 
-    const checkCell = () => {
-        // TODO: Logic
-        //maybe recursive function
-        // if cell is empty/null → reveal all adjacent cells until have number (wall of number)
-        // if cell is number → reveal cell
-        // if cell is mine → end game and reveal all mines
-    }
+            let newGrid = [...grid];
+            if (newGrid[x][y].value === CELL_VALUES.MINE) {
+                console.log('Game Over');
 
-    // Start game (trigger on gameStarted)
-    /*useEffect(() => {
-        if (!gameStarted) {
-            setRevealCells([]);
-            setFindMines([]);
+                //TODO: move this to trigger the game over
+                /*for(let i = 0; i < setMines.length; i++)
+                    newGrid[setMines[i].x][setMines[i].y].revealed = true;*/
+
+                onGameOver(false);
+            } else {
+                let newCellsRevealed = cellsRevealed;
+                let newRevealCells = reveal(newGrid, x, y, cellsRevealed);
+                setGrid(newRevealCells);
+                setRevealCells(newCellsRevealed);
+                /*if () //TODO: Check if the player won the game
+                    onGameOver(true);*/
+            }
         }
-    }, [gameStarted])*/
+    }
 
-    // Check if the player won the game (tigger on findMines)
-    /*useEffect(() => {
-        //TODO: Check if the player won the game
-        if (gameStarted && findMines === level)
-            onGameOver(true);
+    // Rigth click to reveal cell
+    const updateFlagCell = (event, x, y) => {
+        if (gameStarted) {
+            event.preventDefault(); // Desativa o menu de contexto
 
-        onGameOver(true);
-    }, [findMines])*/ //TODO: PLACEHOLDER
+            let newGrid = [...grid];
+
+            if (newGrid[x][y].revealed)
+                return
+
+            switch (newGrid[x][y].flag) {
+                case CELL_FLAG.NOTHING:
+                    newGrid[x][y].flag = CELL_FLAG.FLAG;
+                    break;
+
+                case CELL_FLAG.FLAG:
+                    newGrid[x][y].flag = CELL_FLAG.QUESTION;
+                    break;
+
+                case CELL_FLAG.QUESTION:
+                    newGrid[x][y].flag = CELL_FLAG.NOTHING;
+                    break;
+
+                default:
+                    break;
+            }
+            setGrid(newGrid);
+        }
+            
+    }
 
     const gameClass =
-    level === "1"
-      ? ""
-      : level === "2"
-      ? "intermedio"
-      : "avancado";
+        level === '1'
+        ? ''
+        : level === '2'
+        ? 'intermedio'
+        : level === '3'
+        ? 'avancado'
+        : '';
 
     return (
         <section className="game-panel">
             <div id="game" className={gameClass}>
-                {cells.map((cellRow, index) =>
-                    cellRow.map((cell, index) => 
+                {grid.map((gridRow, i) =>
+                    gridRow.map((cell, k) => 
                         <Cell
-                            key={index}
-                            value={cell.value}
-                            isRevealed={cell.isRevealed}
-                            onLeftClieck={() => handleClickToRevealCell()}
-                            onRighClick={() => handleClickToStatecell()}
+                            key={`${i}-${k}`}
+                            item={cell}
+                            onLeftClieck={revealCell}
+                            onRighClick={updateFlagCell}
                         />
-                        )
+                    )
                 )}
             </div>
         </section>
