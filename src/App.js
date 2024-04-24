@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Header, ControlPanel, Footer, GamePanel, GameOverModal } from './components';
+import { LEVELS } from './constants'
 
 let timerID = undefined;
 
@@ -22,6 +23,20 @@ function App() {
   const handleLevelChange = (event) => {
     const { value } = event.currentTarget;
     setLevel(value);
+    
+    switch (value) {
+      case "1":
+        setMines(LEVELS.BASIC.mines);
+        break;
+      case "2":
+        setMines(LEVELS.INTERMEDIATE.mines);
+        break;
+      case "3":
+        setMines(LEVELS.ADVANCED.mines);
+        break;
+      default:
+        setMines(0);
+    }
   }
 
   // Stopwatch count (trigger on gameStarted)
@@ -43,6 +58,16 @@ function App() {
         clearInterval(timerID);
     };
   }, [gameStarted])
+
+  useEffect(() => {
+    if (!gameOver)
+      return;
+
+    /*for(let i = 0; i < setMines.length; i++)
+      newGrid[setMines[i].x][setMines[i].y].revealed = true;*/
+
+    setGameStarted(false);
+  }, [gameOver])
 
   return (
     <div className="App" id="container">

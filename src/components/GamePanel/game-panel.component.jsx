@@ -36,11 +36,7 @@ const GamePanel = (props) => {
         }
 
         let newGrid = createGrid(levelConfig.rows, levelConfig.cols);
-        console.log(newGrid);
         let newMines = putMines(newGrid, levelConfig.mines);
-        
-        console.log(newGrid);
-        console.log(newMines);
 
         setGrid(newGrid);
         //setMines(newMines);
@@ -53,22 +49,16 @@ const GamePanel = (props) => {
                 return
 
             let newGrid = [...grid];
-            if (newGrid[x][y].value === CELL_VALUES.MINE) {
-                console.log('Game Over');
-
-                //TODO: move this to trigger the game over
-                /*for(let i = 0; i < setMines.length; i++)
-                    newGrid[setMines[i].x][setMines[i].y].revealed = true;*/
-
+            /*if (newGrid[x][y].value === CELL_VALUES.MINE)
                 onGameOver(false);
-            } else {
+            else {*/
                 let newCellsRevealed = cellsRevealed;
                 let newRevealCells = reveal(newGrid, x, y, cellsRevealed);
                 setGrid(newRevealCells);
                 setRevealCells(newCellsRevealed);
                 /*if () //TODO: Check if the player won the game
                     onGameOver(true);*/
-            }
+            //}
         }
     }
 
@@ -98,6 +88,9 @@ const GamePanel = (props) => {
                 default:
                     break;
             }
+
+            //TODO: update the number of mines left (up or down)
+
             setGrid(newGrid);
         }
             

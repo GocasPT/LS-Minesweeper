@@ -28,7 +28,7 @@ function ControlPanel(props) {
         <button
           type="button"
           id="btPlay"
-          disabled={level === "0" || gameStarted}
+          disabled={level === "0"}
           onClick={onGameStart}
         >
           {gameStarted ? "Parar jogo" : "Iniciar Jogo"}

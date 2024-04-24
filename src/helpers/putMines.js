@@ -17,7 +17,7 @@ function putMines(grid, numberOfMines) {
             for (let i = -1; i <= 1; i++) {
                 for (let j = -1; j <= 1; j++) {
                     if (x + i >= 0 && x + i < grid.length && y + j >= 0 && y + j < grid[0].length) {
-                        if (grid[x + i][y + j] !== CELL_VALUES.MINE) {
+                        if (grid[x + i][y + j].value !== CELL_VALUES.MINE) {
                             grid[x + i][y + j].value++;
                         }
                     }
