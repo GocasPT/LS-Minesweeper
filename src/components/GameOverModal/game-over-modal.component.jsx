@@ -6,7 +6,8 @@ import "./game-over-modal.css";
 function GameOverModal(props) {
   const { isOpen, stopWatch, minesLeft, handleClose } = props;
 
-  const modalClass = `w3-modal${isOpen ? " show-modal" : ""}`;
+  const modalClass = `w3-modal ${isOpen ? "show-modal" : ""}`;
+
   return (
     <div id="modal-gameOver" className={modalClass}>
       <div className="w3-modal-content w3-card-4 w3-animate-zoom estilos">
@@ -21,19 +22,9 @@ function GameOverModal(props) {
           <div>Jogo Terminado</div>
         </header>
         <div className="info" id="messageGameOver">
-          <p>Tempo: {stopWatch} </p>
           <p>Minas restantes: {minesLeft}</p>
+          <p>Tempo: {stopWatch} </p>
         </div>
-        {/* <div className="info" id="nickname">
-          Nick Name:
-          <input
-            type="text"
-            id="inputNick"
-            size="16"
-            placeholder="Introduza seu Nick"
-          />
-          <button id="okTop">ok</button>
-        </div> */}
         <Footer />
       </div>
     </div>

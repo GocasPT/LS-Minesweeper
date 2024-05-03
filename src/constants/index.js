@@ -25,7 +25,8 @@ export const LEVELS = {
 // Valores da célula
 export const CELL_VALUES = {
 	EMPTY: 0,
-	MINE: -1
+	MINE: -1,
+	EXPLOSION: -2
 }
 
 // Estados da célula

@@ -7,6 +7,7 @@ function reveal(newGrid, x, y, numOfRevealedCells) {
         return grid
 
     grid[x][y].revealed = true;
+
     if (grid[x][y].value === CELL_VALUES.EMPTY) {
         numOfRevealedCells++;
         for (let i = -1; i <= 1; i++) {

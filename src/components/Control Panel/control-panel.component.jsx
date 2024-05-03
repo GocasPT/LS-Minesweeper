@@ -3,7 +3,7 @@ import "./control-panel.css";
 
 //TODO: improve this component
 function ControlPanel(props) {
-  const { gameStarted, level, onGameStart, onLevelChange, stopWatch, minesLeft } = props;
+  const { gameStarted, onGameStart, level, onLevelChange, stopWatch } = props;
   
   const gameStartedClass = gameStarted ? " gameStarted" : "";
 
@@ -28,10 +28,10 @@ function ControlPanel(props) {
         <button
           type="button"
           id="btPlay"
-          disabled={level === "0"}
+          disabled={level === "0" || gameStarted}
           onClick={onGameStart}
         >
-          {gameStarted ? "Parar jogo" : "Iniciar Jogo"}
+          Iniciar Jogo
         </button>
       </form>
       <div className="form-metadata">
@@ -41,10 +41,6 @@ function ControlPanel(props) {
         <dl className={`list-item left${gameStartedClass}`}>
           <dt>Tempo de Jogo:</dt>
           <dd id="gameTime">{stopWatch}</dd>
-        </dl>
-        <dl className={`list-item right${gameStartedClass}`}>
-          <dt>Minas restantes</dt>
-          <dd id="minesLeft">{minesLeft}</dd>
         </dl>
       </div>
     </section>

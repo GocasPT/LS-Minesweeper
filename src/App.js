@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Header, ControlPanel, Footer, GamePanel, GameOverModal } from './components';
 import { LEVELS } from './constants'
+import './assets/styles/App.css'
 
 let timerID = undefined;
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [level, setLevel] = useState("0");
-  const [mines, setMines] = useState(0);
+  const [numMines, setNumMines] = useState(0);
   const [stopWatch, setStopWatch] = useState(0);
   const [gameOver, setGameOver] = useState(false);
 
@@ -19,6 +20,19 @@ function App() {
       setGameStarted(true);
   }
 
+  // Game Over
+  const handleGameOver = () => {
+    if (gameOver) {
+      setGameOver(false);
+      clearInterval(timerID);
+      setStopWatch(0);
+    }
+    else {
+      setGameStarted(false);
+      setGameOver(true);
+    }
+  }
+
   // Set the game level
   const handleLevelChange = (event) => {
     const { value } = event.currentTarget;
@@ -26,53 +40,38 @@ function App() {
     
     switch (value) {
       case "1":
-        setMines(LEVELS.BASIC.mines);
+        setNumMines(LEVELS.BASIC.mines);
         break;
+
       case "2":
-        setMines(LEVELS.INTERMEDIATE.mines);
+        setNumMines(LEVELS.INTERMEDIATE.mines);    
         break;
+
       case "3":
-        setMines(LEVELS.ADVANCED.mines);
+        setNumMines(LEVELS.ADVANCED.mines);
         break;
+
       default:
-        setMines(0);
+        setNumMines(0);
     }
   }
 
   // Stopwatch count (trigger on gameStarted)
   useEffect(() => {
-    if (gameStarted) {
-      timerID = setInterval(() => { // atualiza o cronômetro
-        let nexTime;
-        setStopWatch((previousState) => {
-          nexTime = previousState + 1; // stopWatch++
-          return nexTime;
-        })
-      }, 1000); // a cada 1 segundo
-    } else { // Reset the stopwatch
-      setStopWatch(0);
-    }
+  if (gameStarted) {
+    timerID = setInterval(() => {
+      setStopWatch(prev => prev + 1);
+    }, 1000);
+  }
 
-    return () => {
-      if (timerID)
-        clearInterval(timerID);
-    };
-  }, [gameStarted])
-
-  useEffect(() => {
-    if (!gameOver)
-      return;
-
-    /*for(let i = 0; i < setMines.length; i++)
-      newGrid[setMines[i].x][setMines[i].y].revealed = true;*/
-
-    setGameStarted(false);
-  }, [gameOver])
+  return () => {
+    clearInterval(timerID);
+  };
+}, [gameStarted]);
 
   return (
     <div className="App" id="container">
       <Header />
-      {/*TODO: check this block*/}
       <main className='main-content'>
         <ControlPanel
           gameStarted={gameStarted}
@@ -80,18 +79,20 @@ function App() {
           onGameStart={handleGameStart}
           onLevelChange={handleLevelChange}
           stopWatch={stopWatch}
-          minesLeft={mines}
         />
         <GamePanel
           gameStarted={gameStarted}
           level={level}
-          setMines={(value) => setMines(value)}
-          onGameOver={(value) => setGameOver(value)}
+          mines={numMines}
+          setMines={setNumMines}
+          gameOver={gameOver}
+          onGameOver={handleGameOver}
         />
         <GameOverModal
-          gameOver={gameOver}
+          isOpen={gameOver}
           stopWatch={stopWatch}
-          minesLeft={mines}
+          minesLeft={numMines}
+          handleClose={handleGameOver}
         />
       </main>
       <Footer />

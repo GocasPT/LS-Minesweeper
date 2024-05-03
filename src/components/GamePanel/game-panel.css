@@ -13,22 +13,28 @@
   width: 80%;
   min-width: 200px;
   margin: 0 auto;
-  /*padding-top: 10px;
-  padding-bottom: 20px;*/
+  padding-top: 10px;
+  padding-bottom: 20px;
   grid-template-columns: repeat(9, auto);
-  /*gap: 10px;*/
   display: grid;
   justify-content: center;
   perspective: 1000px;
   user-select: none;
 }
 
+#game.disable {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+#game.disable .cell button {
+  background: gray;
+}
+
 #game.intermedio {
-  /*width: 80%;*/
   grid-template-columns: repeat(16, auto);
 }
 
 #game.avancado {
-  /*width: 80%;*/
   grid-template-columns: repeat(30, auto);
 }
